@@ -2,7 +2,6 @@ from urlparse import urljoin
 
 from event_indexing.scrapers.base_json_scraper import IncidentJsonScraper
 from event_indexing.util.time_utils import now_milliseconds
-from event_indexing.util.time_utils import get_tz_now
 
 MINIMUM_CUSTOMERS_AFFECTED = 10
 
@@ -12,20 +11,25 @@ class LUPowerOutages(IncidentJsonScraper):
     tz_name = 'US/Eastern'
     method = 'GET'
 
-    def get_params(self, **kwargs):
-        now = now_milliseconds()
-
-        return {
-            '_': now
-        }
-
     def get_provider(self, **kwargs):
         return {
             'id': 'lu_power_outages',
             'name': 'LaFollette Utilities',
             'api_host': 'www.outageentry.com',
-            'api_route': '/CustomerFacingAppJQM/ajaxShellOut.php?target=device_markers&action=get&serviceIndex=1&url=10.58.27.9%3A80',
-            'url': 'http://www.outageentry.com/CustomerFacingAppJQM/outage.php?clientid=LAFOLLETTE'
+            'api_route': '/CustomerFacingAppJQM/ajaxShellOut.php',
+            'url': 'https://www.outageentry.com/CustomerFacingAppJQM/outage.php?clientid=LAFOLLETTE'
+        }
+
+    def get_params(self, **kwargs):
+        now = now_milliseconds()
+
+        return {
+            'target': 'device_markers',
+            'action': 'get',
+            'serviceIndex': 1,
+            'url': '10.58.27.9',
+            '': '3A80',
+            '_': now
         }
 
     def get_url(self, **kwargs):
@@ -37,8 +41,8 @@ class LUPowerOutages(IncidentJsonScraper):
 
         return urljoin(host, provider['api_route'])
 
-    def is_valid_incident(self, raw_incident):
-        affected = int(raw_incident['consumers_affected'])
+    def is_valid_incident(self, incident):
+        affected = int(incident['consumers_affected'])
 
         return affected >= MINIMUM_CUSTOMERS_AFFECTED
 
@@ -48,35 +52,22 @@ class LUPowerOutages(IncidentJsonScraper):
         return [self.get_incident(incident) for incident in incidents if self.is_valid_incident(incident)]
 
     def get_incident(self, raw_incident, **kwargs):
-        incident = "Power Outage"
+        incident = 'Power Outage'
         start_date = raw_incident['start_date']
         longitude = raw_incident['lon']
         latitude = raw_incident['lat']
-        affected = raw_incident['consumers_affected']
+        consumers_affected = raw_incident['consumers_affected']
 
-        date_time = self.get_date_time()
-        # created_at = self.get_created_at(date_time)
-        created_at = 1471567800 # ONLY FOR TESTING
+        created_at = self.get_created_at(start_date)
 
         incident_id = self.get_incident_id([created_at, incident, latitude, longitude])
 
         return {
             'id': incident_id,
-            'start_date,': start_date,
             'incident': incident,
+            'created_at': created_at,
+            'start_date': start_date,
             'longitude': longitude,
             'latitude': latitude,
-            'consumers_affected': affected,
-            'created_at': created_at,
+            'consumers_affected': consumers_affected
         }
-
-    def get_date_time(self):
-        tz_info = self.get_tz_info()
-        now = get_tz_now(tz_info)
-
-        return now.strftime('%m/%d/%Y %H:%M:%S')
-
-
-if __name__ == '__main__':
-    scraper = LUPowerOutages(None, None, None)
-    scraper.run()
