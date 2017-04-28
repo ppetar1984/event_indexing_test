@@ -1,0 +1,138 @@
+{
+  "response": {
+    "file_title": "032001",
+    "file_data": [
+      {
+        "id": "7",
+        "title": "Outage Information",
+        "desc": {
+          "inc_id": "4566991",
+          "cause": "Unknown",
+          "cluster": false,
+          "cust_a": {
+            "val": 10,
+            "masked": true
+          },
+          "start": "2016-08-18T20:50:00-0400",
+          "etrConfidence": "HIGH",
+          "etr": "2017-03-18T14:30:00-0400"
+        },
+        "geom": {
+          "a": [
+            "aby~E~y`fNiBXHyA~A~@"
+          ],
+          "p": [
+            "edy~Ery`fN"
+          ]
+        }
+      },
+      {
+        "id": "8",
+        "title": "Outage Information",
+        "desc": {
+          "inc_id": "4566991",
+          "cause": "Unknown",
+          "cluster": false,
+          "cust_a": {
+            "val": 10,
+            "masked": true
+          },
+          "start": "2016-08-16T20:50:00-0400",
+          "etrConfidence": "HIGH",
+          "etr": "2017-03-18T14:30:00-0400"
+        },
+        "geom": {
+          "a": [
+            "aby~E~y`fNiBXHyA~A~@"
+          ],
+          "p": [
+            "edy~Ery`fN"
+          ]
+        }
+      }
+    ]
+  },
+  "incident": {
+    "latitude": 36.70398,
+    "created_at": 1471567800.0,
+    "incident": "Power Outage",
+    "id": "b1e03f2684032b3667a238ccb0942737",
+    "longitude": -82.00351
+  },
+  "incidents": [
+    {
+      "category": "power_outage",
+      "detected_at": 1471567800.0,
+      "prediction": 1.0,
+      "coordinates": {
+        "lat": 36.67027,
+        "long": -79.79946
+      },
+      "source": {
+        "text": "Power Outage",
+        "created_at": 1471567800.0,
+        "provider": {
+          "url": "http://outagemap.appalachianpower.com.s3.amazonaws.com/external/default.html",
+          "api_route": "/resources/data/external/interval_generation_data/2017_03_18_13_45_30/outages/0320012332.json",
+          "api_host": "outagemap.appalachianpower.com.s3.amazonaws.com",
+          "id": "ap_power_outages",
+          "name": "Appalachian American Electric Power Co"
+        },
+        "type": "cad_api",
+        "geo": {
+          "type": "Point",
+          "coordinates": [
+            -79.79946,
+            36.67027
+          ]
+        },
+        "id": "b1e03f2684032b3667a238ccb0942737"
+      },
+      "incident": "Power Outage"
+    }
+  ],
+  "meta": {
+    "directory": "2017_03_18_13_45_30",
+    "index": "0320012332"
+  },
+  "indexes": [
+    {
+      "url": "http://outagemap.appalachianpower.com.s3.amazonaws.com/resources/data/external/interval_generation_data/2017_03_18_13_45_30/outages/0320012332.json",
+      "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36"
+      },
+      "meta": {
+        "directory": "2017_03_18_13_45_30",
+        "index": "0320012332"
+      },
+      "params": {
+        "_": 1489845309221
+      }
+    }
+  ],
+  "raw_incident": {
+    "id": "7",
+    "title": "Outage Information",
+    "desc": {
+      "inc_id": "4566991",
+      "cause": "Unknown",
+      "cluster": false,
+      "cust_a": {
+        "val": 50,
+        "masked": true
+      },
+      "start": "2016-08-18T20:50:00-0400",
+      "etrConfidence": "HIGH",
+      "etr": "2017-03-18T14:30:00-0400"
+    },
+    "geom": {
+      "a": [
+        "aby~E~y`fNiBXHyA~A~@"
+      ],
+      "p": [
+        "edy~Ery`fN"
+      ]
+    }
+  }
+}

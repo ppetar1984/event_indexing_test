@@ -1,0 +1,160 @@
+{
+  "response":
+  {
+    "index": "1",
+    "outages": 119,
+    "result": "true",
+    "markers":
+    [
+      {
+        "ert": null,
+        "incident_id": "D372625",
+        "lat": "36.3322327488042",
+        "consumers_affected": "14",
+        "lon": "-84.0379808698967",
+        "substation": "11",
+        "comments": "due to water levels rising, the panel boxes are at risk for water getting in them and have been taken off line and will go back on when we feel it is safe",
+        "feeder": "214",
+        "alias": "Carp Ln- Shahghai",
+        "duration": "1 day 19:17:05.303",
+        "linesection": "M14G4670-1",
+        "start_date": "04/24 02:31:01 pm",
+        "linelocation": "11-214-M14G4670-1"
+      },
+      {
+        "ert": null,
+        "incident_id":"D372649",
+        "lat": "36.3328756924558",
+        "consumers_affected": "5",
+        "lon": "-84.0377864341863",
+        "substation": "11",
+        "comments": "houseboats cut loose due to flood",
+        "feeder": "214",
+        "alias": "House Boats Carp Lane",
+        "duration": "20:26:29.303",
+        "linesection": "M14G4882-1",
+        "start_date": "04/25 01:21:37 pm",
+        "linelocation": "11-214-M14G4882-1"
+      },
+      {
+        "ert": null,
+        "incident_id": "D372622",
+        "lat": "36.3318097421793",
+        "consumers_affected": "2",
+        "lon": "-84.0377377058191",
+        "substation": "11",
+        "comments": "due to water levels rising, the panel boxes are at risk for water getting in them and have been taken off line and will go back on when we feel it is safe",
+        "feeder": "214",
+        "alias": "Carp Ln - Shanghia",
+        "duration": "1 day 19:44:25.303",
+        "linesection": "M14G4963-1",
+        "start_date": "04/24 02:03:41 pm",
+        "linelocation": "11-214-M14G4963-1"
+      },
+      {
+        "ert": null,
+        "incident_id": "D372666",
+        "lat": "36.3223315639592",
+        "consumers_affected": "72",
+        "lon": "-84.172019296097",
+        "substation": "7",
+        "comments": null,
+        "feeder": "214",
+        "alias": "Mt Paran Rd",
+        "duration": "00:17:16.303",
+        "linesection": "RECLOSER230",
+        "start_date": "04/26 09:30:50 am",
+        "linelocation": "7-214-RECLOSER230"
+      },
+      {
+        "ert": null,
+        "incident_id": "D372667",
+        "lat": "36.3730551257372",
+        "consumers_affected": "12",
+        "lon": "-84.1381135114996",
+        "substation": "1",
+        "comments": null,
+        "feeder": "234",
+        "alias": "west ave",
+        "duration": "00:12:52.303",
+        "linesection": "FUSE351",
+        "start_date": "04/26 09:35:14 am",
+        "linelocation": "1-234-FUSE351"
+      },
+      {
+        "ert": null,
+        "incident_id": "D372646",
+        "lat": "36.4280389900034",
+        "consumers_affected": "6",
+        "lon": "-83.968082587917",
+        "substation": "2",
+        "comments": "cut out due to flood",
+        "feeder": "214",
+        "alias": "Rogers Dock Camp ground",
+        "duration": "21:11:23.303",
+        "linesection": "O19N0835-1",
+        "start_date": "04/25 12:36:43 pm",
+        "linelocation": "2-214-O19N0835-1"
+      }
+    ],
+    "target": "device_markers"
+  },
+  "incident":
+  {
+    "start_date,": "04/24 02:31:01 pm",
+    "consumers_affected": "14",
+    "created_at": 1471567800,
+    "longitude": "-84.0379808698967",
+    "incident": "Power Outage",
+    "latitude": "36.3322327488042",
+    "id": "8680ba2f26da0213cdd3fa54eda9846a"
+  },
+  "incidents": [
+  {
+    "category": "power_outage",
+    "detected_at": 1471567800,
+    "prediction": 1.0,
+    "coordinates":
+    {
+      "lat": "36.3322327488042",
+      "long": "-84.0379808698967"
+    },
+    "source":
+    {
+      "text": "Power Outage",
+      "created_at": 1471567800,
+      "provider":
+      {
+        "url": "http://www.outageentry.com/CustomerFacingAppJQM/outage.php?clientid=LAFOLLETTE",
+        "api_route": "/CustomerFacingAppJQM/ajaxShellOut.php?target=device_markers&action=get&serviceIndex=1&url=10.58.27.9%3A80",
+        "api_host": "www.outageentry.com",
+        "id": "lu_power_outages",
+        "name": "LaFollette Utilities"
+      },
+      "type": "cad_api",
+      "geo":
+      {
+        "type": "Point",
+        "coordinates":["-84.0379808698967", "36.3322327488042"]
+      },
+      "id": "8680ba2f26da0213cdd3fa54eda9846a"
+    },
+    "incident": "Power Outage"
+  }
+    ],
+  "raw_incident":
+  {"ert": "None",
+    "id":"D372625",
+    "lat":"36.3322327488042",
+    "consumers_affected":"14",
+    "lon":"-84.0379808698967",
+    "substation":"11",
+    "comments":"due to water levels rising, the panel boxes are at risk for water getting in them and have been taken off line and will go back on when we feel it is safe",
+    "feeder":"214",
+    "alias":"Carp Ln- Shahghai",
+    "duration":"1 day 21:54:53.869",
+    "linesection":"M14G4670-1",
+    "start_date":"04/24 02:31:01 pm",
+    "linelocation":"11-214-M14G4670-1"
+  }
+}

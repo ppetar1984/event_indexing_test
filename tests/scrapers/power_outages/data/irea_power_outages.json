@@ -1,0 +1,42 @@
+{
+  "incidents": [
+    {
+      "category": "power_outage",
+      "detected_at": 1471567800.0,
+      "prediction": 1.0,
+      "coordinates": {
+        "lat": 39.3804851523661,
+        "long": -104.875128646716
+      },
+      "source": {
+        "text": "Power Outage",
+        "created_at": 1471567800.0,
+        "provider": {
+          "url": "http://irea.maps.sienatech.com/",
+          "api_route": "/data/outages.xml",
+          "api_host": "irea.maps.sienatech.com",
+          "id": "irea_power_outages",
+          "name": "Intermountain Rural Electric Association"
+        },
+        "type": "cad_api",
+        "geo": {
+          "type": "Point",
+          "coordinates": [
+            -104.875128646716,
+            39.3804851523661
+          ]
+        },
+        "id": "354737115"
+      },
+      "incident": "Power Outage"
+    }
+  ],
+  "incident": {
+    "latitude": 39.3804851523661,
+    "created_at": 1471567800.0,
+    "incident": "Power Outage",
+    "id": "354737115",
+    "longitude": -104.875128646716
+  },
+  "raw_incident": "<outage affected='11' cause='Construction' comment='CPI is moving wire, there is no load on T-34646' county='DOUGLAS' duration='600' etor='04/06/2017 05:00:00' etoraltdesc='Assessing' etorbegin='3600' etorend='3600' id='354737115' lat='39.3804851523661' lng='-104.875128646716' outage_crews='CPI 1' towns='' township=''></outage>"
+}

@@ -1,0 +1,135 @@
+{
+  "response": {
+    "file_title": "03201012",
+    "file_data": [
+      {
+        "id": "outages_10",
+        "title": "Outage Information",
+        "icon": "images/impl/outages_1.gif",
+        "desc": [
+          {
+            "cust_a": "55",
+            "start": "Aug 18, 8:50 PM",
+            "cause": "Wires Down",
+            "crew_status": "On Site",
+            "etr": "Aug 19, 8:50 PM",
+            "href": "zoomIntoIcon(39.70963,-75.32731)"
+          }
+        ],
+        "geom": [
+          {
+            "a": "_xjqFjjwjMG??NF??O"
+          },
+          {
+            "p": "cxjqFrjwjM"
+          }
+        ]
+      },
+      {
+        "id": "outages_11",
+        "title": "Outage Information",
+        "icon": "images/impl/outages_1.gif",
+        "desc": [
+          {
+            "cust_a": "Less than 5",
+            "start": "Aug 16, 12:32 PM",
+            "cause": "Wires Down",
+            "crew_status": "Assigned",
+            "etr": "Aug 17, 9:00 PM",
+            "href": "zoomIntoIcon(39.79989,-75.1592)"
+          }
+        ],
+        "geom": [
+          {
+            "a": "el|qFtoviMG??PF??Q"
+          },
+          {
+            "p": "il|qF|oviM"
+          }
+        ]
+      }
+    ]
+  },
+  "incident": {
+    "latitude": 39.70962,
+    "created_at": 1471567800.0,
+    "incident": "Wires Down",
+    "id": "4a80d97532580676d95d41ae64b0ef56",
+    "longitude": -75.3273
+  },
+  "incidents": [
+    {
+      "category": "power_outage",
+      "detected_at": 1471567800.0,
+      "prediction": 1.0,
+      "coordinates": {
+        "lat": 39.70962,
+        "long": -75.3273
+      },
+      "source": {
+        "text": "Wires Down",
+        "created_at": 1471567800.0,
+        "provider": {
+          "url": "http://www.atlanticcityelectric.com/pages/connectwithus/outages/outagemaps.aspx",
+          "api_route": "/data/interval_generation_data/2017_03_16_01_15_30/outages/0320010122.js",
+          "api_host": "stormcenter.atlanticcityelectric.com.s3.amazonaws.com",
+          "id": "ace_power_outages",
+          "name": "Atlantic City Electric"
+        },
+        "type": "cad_api",
+        "geo": {
+          "type": "Point",
+          "coordinates": [
+            -75.3273,
+            39.70962
+          ]
+        },
+        "id": "4a80d97532580676d95d41ae64b0ef56"
+      },
+      "incident": "Wires Down"
+    }
+  ],
+  "meta": {
+    "directory": "2017_03_16_01_15_30",
+    "index": "0320010122"
+  },
+  "indexes": [
+    {
+      "url": "http://stormcenter.atlanticcityelectric.com.s3.amazonaws.com/data/interval_generation_data/2017_03_16_01_15_30/outages/0320010122.js",
+      "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36"
+      },
+      "meta": {
+        "directory": "2017_03_16_02_01_00",
+        "index": "0320001130"
+      },
+      "params": {
+        "timestamp": 1471568199000
+      }
+    }
+  ],
+  "raw_incident": {
+    "id": "outages_10",
+    "title": "Outage Information",
+    "icon": "images/impl/outages_1.gif",
+    "desc": [
+      {
+        "cust_a": "55",
+        "start": "Aug 18, 8:50 PM",
+        "cause": "Wires Down",
+        "crew_status": "On Site",
+        "etr": "Aug 19, 8:50 PM",
+        "href": "zoomIntoIcon(39.70963,-75.32731)"
+      }
+    ],
+    "geom": [
+      {
+        "a": "_xjqFjjwjMG??NF??O"
+      },
+      {
+        "p": "cxjqFrjwjM"
+      }
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "response": [
+    {
+      "DispatchTime": "08-18-2016",
+      "DispatchTime2": "19:50:00",
+      "lat": 36.079222285,
+      "lon": -94.24650377,
+      "City": null,
+      "CallType": "THEFT",
+      "Address": "\u003cUNKNOWN\u003e"
+    },
+    {
+      "DispatchTime": "08-16-2016",
+      "DispatchTime2": "18:38:25",
+      "lat": -361.0000000000000000,
+      "lon": -361.0000000000000000,
+      "City": null,
+      "CallType": "THEFT",
+      "Address": "4023 W SONG BIRD PL"
+    }
+  ],
+  "incident": {
+    "created_at": 1471567800.0,
+    "longitude": -94.24650377,
+    "datetime": "08-18-2016 19:50:00",
+    "incident": "THEFT",
+    "latitude": 36.079222285,
+    "id": "4736e084af57137066dfdf50e6263463"
+  },
+  "incidents": [
+    {
+      "category": "crime",
+      "detected_at": 1471567800.0,
+      "prediction": 1.0,
+      "coordinates": {
+        "lat": 36.079222285,
+        "long": -94.24650377
+      },
+      "source": {
+        "text": "THEFT",
+        "created_at": 1471567800.0,
+        "provider": {
+          "url": "http://www.fayetteville-ar.gov/1333/Police-Fire-Dispatch-Logs",
+          "api_route": "/DispatchLogs/json/getIncidents.cshtml/2016-8-17/2016-8-19",
+          "api_host": "gis.fayetteville-ar.gov",
+          "id": "fayetteville_911_cad",
+          "name": "Fayetteville 911"
+        },
+        "type": "cad_api",
+        "geo": {
+          "type": "Point",
+          "coordinates": [
+            -94.24650377,
+            36.079222285
+          ]
+        },
+        "id": "4736e084af57137066dfdf50e6263463"
+      },
+      "incident": "THEFT"
+    }
+  ],
+  "raw_incident": {
+    "DispatchTime": "08-18-2016",
+    "DispatchTime2": "19:50:00",
+    "lat": 36.079222285,
+    "lon": -94.24650377,
+    "City": null,
+    "CallType": "THEFT",
+    "Address": "\u003cUNKNOWN\u003e"
+  },
+  "raw_incident_address": {
+    "DispatchTime": "08-18-2016",
+    "DispatchTime2": "19:50:00",
+    "lat": -361.0000000000000000,
+    "lon": -361.0000000000000000,
+    "City": null,
+    "CallType": "THEFT",
+    "Address": "4023 W SONG BIRD PL"
+  },
+  "raw_incident_code": {
+    "DispatchTime": "08-18-2016",
+    "DispatchTime2": "19:50:00",
+    "lat": 36.079222285,
+    "lon": -94.24650377,
+    "City": null,
+    "CallType": "CODE 7",
+    "Address": "\u003cUNKNOWN\u003e"
+  }
+}

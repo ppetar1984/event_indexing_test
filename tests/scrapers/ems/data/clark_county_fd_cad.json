@@ -1,0 +1,33 @@
+{
+  "incident": {
+    "created_at": 1471567800.0,
+    "incident": "Medical Aid - C Level",
+    "datetime": "Aug 18 2016  5:50PM",
+    "id": "52d35ba3d39c1ee252427252373c26c4",
+    "address": "4505 S Maryland Pky, Clark County 89119"
+  },
+  "incidents": [
+    {
+      "category": "medical",
+      "detected_at": 1471567800.0,
+      "prediction": 1.0,
+      "source": {
+        "text": "Medical Aid - C Level",
+        "created_at": 1471567800.0,
+        "type": "cad_api",
+        "id": "52d35ba3d39c1ee252427252373c26c4",
+        "provider": {
+          "url": "http://fire.co.clark.nv.us/Alarm%20OfficeConverted.aspx",
+          "api_route": "/Alarm%20OfficeConverted.aspx",
+          "api_host": "fire.co.clark.nv.us",
+          "id": "clark_county_fd_cad",
+          "name": "Clark County Fire Department"
+        }
+      },
+      "incident": "Medical Aid - C Level",
+      "address": "4505 S Maryland Pky, Clark County 89119"
+    }
+  ],
+  "row": "<tr style='color:Black;background-color:White;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;'><td>Aug 18 2016  5:50PM</td><td>Clark County</td><td>Medical Aid - C Level</td><td>4505 S Maryland Pky, Clark County 89119</td><td>02825-59</td><td><a href='http://maps.google.com/maps?f=q&amp;hl=en&amp;q=4505+S+Maryland+Pky+Las+Vegas+89119' target='_blank'>map</a></td></tr>",
+  "value": "<td>Medical Aid - C Level</td>"
+}

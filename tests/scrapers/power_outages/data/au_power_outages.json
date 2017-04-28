@@ -1,0 +1,125 @@
+{
+  "response": {
+    "file_title": "0212310212",
+    "file_data": [
+      {
+        "id": "2",
+        "title": "Outage Information",
+        "desc": {
+          "start": "2016-08-18T20:50:00-0400",
+          "etr": "2017-03-21T16:00:10-0700",
+          "last_updated": "2017-03-21T13:08:12-0700",
+          "cluster": false,
+          "cust_a": {
+            "masked": true,
+            "val": 10
+          },
+          "inc_id": "942422",
+          "cause": "Under Investigation"
+        },
+        "geom": {
+          "p": [
+            "obdbHpllkU"
+          ]
+        }
+      },
+      {
+        "id": "10-1",
+        "title": "Area Outage",
+        "desc": {
+          "start": "2016-08-16T20:50:00-0400",
+          "cluster": true,
+          "cust_a": {
+            "val": 23
+          },
+          "n_out": 2
+        },
+        "geom": {
+          "p": [
+            "m_`bHzq|jU"
+          ]
+        }
+      }
+    ]
+  },
+  "incident": {
+    "latitude": 47.7036,
+    "created_at": 1471567800.0,
+    "incident": "Under Investigation",
+    "id": "7e45f5aaffc48209c62108a57096f57f",
+    "longitude": -117.37817
+  },
+  "incidents": [
+    {
+      "category": "power_outage",
+      "detected_at": 1471567800.0,
+      "prediction": 1.0,
+      "incident": "Under Investigation",
+      "coordinates": {
+        "lat": 47.7036,
+        "long": -117.37817
+      },
+      "source": {
+        "text": "Under Investigation",
+        "created_at": 1471567800.0,
+        "provider": {
+          "url": "http://outagemap.myavista.com/external/default.html",
+          "api_route": "/resources/data/external/interval_generation_data/2017_03_21_20_01_30/outages/0212310120.json",
+          "api_host": "outagemap.myavista.com",
+          "id": "au_power_outages",
+          "name": "Avista Utilities"
+        },
+        "type": "cad_api",
+        "geo": {
+          "type": "Point",
+          "coordinates": [
+            -117.37817,
+            47.7036
+          ]
+        },
+        "id": "7e45f5aaffc48209c62108a57096f57f"
+      }
+    }
+  ],
+  "meta": {
+    "directory": "2017_03_21_20_01_30",
+    "index": "0212310120"
+  },
+  "indexes": [
+    {
+      "url": "http://outagemap.myavista.com/resources/data/external/interval_generation_data/2017_03_21_20_01_30/outages/0212310120.json",
+      "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36"
+      },
+      "meta": {
+        "directory": "2017_03_21_20_01_30",
+        "index": "0212310120"
+      },
+      "params": {
+        "_": 1490126543165
+      }
+    }
+  ],
+  "raw_incident": {
+    "id": "2",
+    "title": "Outage Information",
+    "desc": {
+      "start": "2016-08-18T20:50:00-0400",
+      "etr": "2017-03-21T16:00:10-0700",
+      "last_updated": "2017-03-21T13:08:12-0700",
+      "cluster": false,
+      "cust_a": {
+        "masked": true,
+        "val": 10
+      },
+      "inc_id": "942422",
+      "cause": "Under Investigation"
+    },
+    "geom": {
+      "p": [
+        "obdbHpllkU"
+      ]
+    }
+  }
+}

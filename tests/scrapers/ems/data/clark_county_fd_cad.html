@@ -1,0 +1,85 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+		<title>Alarm_Office</title>
+		<meta content="Microsoft Visual Studio.NET 7.0" name="GENERATOR">
+		<meta content="Visual Basic 7.0" name="CODE_LANGUAGE">
+		<meta content="JavaScript" name="vs_defaultClientScript">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+		<meta http-equiv="refresh" content="30">
+		<style type="text/css">
+		A.alarm { FONT-SIZE: 11px; COLOR: thistle; BORDER-TOP-STYLE: none; FONT-FAMILY: Arial, Verdana; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; TEXT-DECORATION: none; BORDER-BOTTOM-STYLE: none }
+	A.alarm:link { FONT-SIZE: 11px; COLOR: thistle; BORDER-TOP-STYLE: none; FONT-FAMILY: Arial, Verdana; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; TEXT-DECORATION: none; BORDER-BOTTOM-STYLE: none }
+	A.alarm:visited { FONT-SIZE: 11px; COLOR: thistle; BORDER-TOP-STYLE: none; FONT-FAMILY: Arial, Verdana; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; TEXT-DECORATION: none; BORDER-BOTTOM-STYLE: none }
+	A.alarm:hover { COLOR: gold }
+	A.alr { FONT-SIZE: 9px; COLOR: gainsboro; BORDER-TOP-STYLE: none; FONT-FAMILY: Verdana, Arial; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; TEXT-DECORATION: none; BORDER-BOTTOM-STYLE: none }
+	A.alr:link { FONT-SIZE: 9px; COLOR: gainsboro; BORDER-TOP-STYLE: none; FONT-FAMILY: Verdana, Arial; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; TEXT-DECORATION: none; BORDER-BOTTOM-STYLE: none }
+	A.alr:visited { FONT-SIZE: 9px; COLOR: gainsboro; BORDER-TOP-STYLE: none; FONT-FAMILY: Verdana, Arial; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; TEXT-DECORATION: none; BORDER-BOTTOM-STYLE: none }
+	.style1 {
+	color: #C1A88A;
+	font-weight: bold;
+}
+        </style>
+</head>
+	<body bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" ms_positioning="GridLayout">
+		<form method="post" action="./Alarm OfficeConverted.aspx" id="myFrm">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="21252FC0" />
+</div>
+			<table cellspacing="0" cellpadding="0" align="center" border="0" style="width: 708px">
+					<td style="PADDING-LEFT: 5px; PADDING-BOTTOM: 4px" colspan="2">
+					&nbsp;</td>
+					<td class="alarm" style="PADDING-BOTTOM: 3px" valign="baseline" align="middle" width="132" colspan="1"><a href="AOIncTyp.aspx" target="_blank" class="alarm" style="color:blue; text-decoration:underline">Incident
+							Types Explained</a></td>
+				</tr>
+				<tr>
+					<td style="BORDER-TOP: lightgrey 1px solid; BORDER-LEFT: lightgrey 1px solid; BORDER-BOTTOM: lightgrey 1px solid" width="601" colspan="2"><img height="97" src="Images/fao7.jpg" width="603"></td>
+					<td style="BORDER-RIGHT: lightgrey 1px solid; BORDER-TOP: lightgrey 1px solid; BORDER-LEFT: lightgrey 1px solid; BORDER-BOTTOM: lightgrey 1px solid" width="132" colspan="1"><img height="97" src="Images/fao8.jpg" width="132"></td></tr>
+				<tr height="35">
+					<td style="BORDER-LEFT: lightgrey 1px solid; BORDER-BOTTOM: lightgrey 1px solid" valign="bottom" align="middle" bgcolor="#5f596e" colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="Images/fao9.gif" vspace="6" width="168" height="13"></td>
+					<td style="BORDER-RIGHT: lightgrey 1px solid; BORDER-LEFT: lightgrey 1px solid; BORDER-BOTTOM: lightgrey 1px solid" align="middle" bgcolor="#5f596e"><span id="lblDate" style="display:inline-block;color:#E0E0E0;background-color:Transparent;border-style:None;font-family:Verdana;font-size:8pt;height:16px;">12/16/2016</span>&nbsp;</td></tr>
+				<tr>
+					<td style="BORDER-RIGHT: lightgrey 1px solid; BORDER-LEFT: lightgrey 1px solid; BORDER-BOTTOM: lightgrey 1px solid" align="middle" bgcolor="#857584" colspan="3"><table cellspacing="0" cellpadding="3" rules="rows" id="grdData" style="border-color:#857584;border-width:1px;border-style:Solid;width:736px;border-collapse:collapse;">
+	<tr align="left" style="color:WhiteSmoke;background-color:#857584;border-color:LightGrey;font-family:Verdana;font-size:8pt;font-weight:bold;height:18px;">
+		<td>Date & Time</td><td>Agency</td><td>Incident Type</td><td>Address</td><td>District</td><td>Map</td>
+	</tr><tr style="color:Black;background-color:White;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;">
+		<td>Aug 18 2016  5:50PM</td><td>Clark County</td><td>Medical Aid - C Level</td><td>4505 S Maryland Pky, Clark County 89119</td><td>02825-59</td><td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q=4505+S+Maryland+Pky+Las+Vegas+89119" target="_blank">map</a></td>
+	</tr><tr style="color:Black;background-color:#EFEFEF;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;">
+		<td>Aug 16 2016  6:17PM</td><td>North Las Vegas</td><td>Medical Aid - D1 Level</td><td>3025 Carroll St, North Las Vegas 89030</td><td>02127-21</td><td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q=3025+Carroll+St++Las+Vegas+89030" target="_blank">map</a></td>
+	</tr><tr style="color:Black;background-color:White;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;">
+		<td>Aug 16 2016  6:16PM</td><td>City of Las Vegas</td><td>F16-Public Asst Jurisdiction P</td><td>6921 Welsh Cir, Las Vegas 89108</td><td>01918-48</td><td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q=6921+Welsh+Cir+Las+Vegas+89108" target="_blank">map</a></td>
+	</tr><tr style="color:Black;background-color:#EFEFEF;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;">
+		<td>Aug 16 2016  6:07PM</td><td>City of Las Vegas</td><td>Medical Aid - C Level</td><td>3804 Apache Ln, Las Vegas 89107</td><td>02322-57</td><td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q=3804+Apache+Ln+Las+Vegas+89107" target="_blank">map</a></td>
+	</tr><tr style="color:Black;background-color:White;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;">
+		<td>Aug 16 2016  6:03PM</td><td>City of Las Vegas</td><td>Basic Life Support</td><td>9132 Bushy Tail Ave, Las Vegas 89149</td><td>01516-11</td><td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q=9132+Bushy+Tail+Ave+Las+Vegas+89149" target="_blank">map</a></td>
+	</tr><tr style="color:Black;background-color:#EFEFEF;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;">
+		<td>Aug 16 2016  5:46PM</td><td>Clark County</td><td>Medical Aid - A Level</td><td>3440 Spring Mountain Rd, Clark County 89102</td><td>02723-33</td><td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q=3440+Spring+Mountain+Rd+Las+Vegas+89102" target="_blank">map</a></td>
+	</tr><tr style="color:Black;background-color:White;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;">
+		<td>Aug 16 2016  5:34PM</td><td>Clark County</td><td>Vehicle Accident - B1 Level</td><td>Paradise Rd / Sands Ave, Clark County 89169</td><td>02724-69</td><td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q=Paradise+Rd+%26+Sands+Ave+Las+Vegas+89169" target="_blank">map</a></td>
+	</tr><tr style="color:Black;background-color:#EFEFEF;border-color:#857584;border-width:1px;border-style:Solid;font-family:Arial;font-size:8pt;height:24px;">
+		<td>Aug 16 2016  5:03PM</td><td>City of Las Vegas</td><td>Medical Aid - C2 Level</td><td>6333 Stonegate Way, Las Vegas 89146</td><td>02519-77</td><td><a href="http://maps.google.com/maps?f=q&amp;hl=en&amp;q=6333+Stonegate+Way+Las+Vegas+89146" target="_blank">map</a></td>
+	</tr>
+</table></td></tr>
+				<tr height="20">
+					<td style="BORDER-RIGHT: lightgrey 1px solid; BORDER-LEFT: lightgrey 1px solid; BORDER-BOTTOM: lightgrey 1px solid" align="middle" bgcolor="#5f596e" colspan="3">
+<table cellspacing="0" cellpadding="0" border="0">
+	<tr height="20">
+		<td colspan="1" align="middle" valign="center"><a href="mailto:iab@clarkcountynv.gov" class="alr">Questions? Ideas? Contact the
+      Clark County Fire
+				Department webmaster.</a></td>
+	</tr>
+</table>
+</td></tr>
+				<tr>
+					<td colspan="3" align="center"><a href="javascript:javascript:history.go(-1)"><font face="Verdana" color="blue">Previous Page</font></a><br /><a href="http://www.clarkcountynv.gov/depts/fire/Pages/default.aspx" target="_parent"><font face="Verdana" color="blue">Return Home</font></a></td>
+				</tr></table></form>
+	</body>
+</html>

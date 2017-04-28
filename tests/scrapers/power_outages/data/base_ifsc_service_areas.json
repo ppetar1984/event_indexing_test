@@ -1,0 +1,26 @@
+{
+  "response": {
+    "file_data": [
+      {
+        "geom": {
+          "l": [
+            "qyitFnurdOllFxFxcFdDqOohGe_C{wBknFymEwmP{|@{j@GyXr@qh@|\\ejBfrAuOl`OvfU`M"
+          ]
+        },
+        "id": "Entry",
+        "title": "Entry"
+      }
+    ],
+    "file_title": "Service Areas Boundary JS"
+  },
+  "bounds": {
+    "southwest": {
+      "latitude": 38.77,
+      "longitude": -75.72
+    },
+    "northeast": {
+      "latitude": 40.04,
+      "longitude": -73.99
+    }
+  }
+}

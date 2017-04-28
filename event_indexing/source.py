@@ -1,0 +1,1 @@
+TYPE_CAD_API = 'cad_api'

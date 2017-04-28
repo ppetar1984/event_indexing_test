@@ -1,0 +1,43 @@
+{
+  "response": "{'Outages':[{'OutageLocation':{'X':-97.252855478069733,'Y':30.151624570610586},'OutagePolygon':[],'OutageRecID':'2017-04-01-0016','OutageName':'2017-04-01-0016','OutageStartTime':'2016-08-18T20:50:00-04:00','OutageEndTime':null,'CustomersRestored':0,'CustomersOutNow':133,'Verified':false,'CrewDispatched':true,'CustomerResponsible':null,'EstimatedTime':null,'TroubledElement':null,'Substation':null,'Feeder':null,'OutagedPhase':null,'Actions':null,'Status':null,'Dispatcher':null,'ClosingDispatcher':null,'CustomersOutInitially':null,'CustomersServed':null,'SuspectedCause':null,'VerifiedCause':null,'Notes':null,'CrewResponsible':null,'MapLocation':null,'PriorityCustomers':null,'District':null,'UplineElement':null,'CostEstimate':null,'OutageStatus':null,'CustomersAffected':null},{'OutageLocation':{'X':-96.825958806524326,'Y':30.447707018038784},'OutagePolygon':[{'X':-96.827441264672444,'Y':30.448982152531737},{'X':-96.824476348376209,'Y':30.446431883545834}],'OutageRecID':'2016-08-16-0017','OutageName':'2016-08-16-0017','OutageStartTime':'2016-08-16T20:50:00-04:00','OutageEndTime':null,'CustomersRestored':0,'CustomersOutNow':12,'Verified':false,'CrewDispatched':true,'CustomerResponsible':null,'EstimatedTime':null,'TroubledElement':null,'Substation':null,'Feeder':null,'OutagedPhase':null,'Actions':null,'Status':null,'Dispatcher':null,'ClosingDispatcher':null,'CustomersOutInitially':null,'CustomersServed':null,'SuspectedCause':null,'VerifiedCause':null,'Notes':null,'CrewResponsible':null,'MapLocation':null,'PriorityCustomers':null,'District':null,'UplineElement':null,'CostEstimate':null,'OutageStatus':null,'CustomersAffected':null}],'Trucks':[],'Areas':[],'CallSummary':{'CustomerCalls':2,'CallsLastHour':2}}",
+  "incident": {
+    "latitude": 30.151624570610586,
+    "incident": "Power Outage",
+    "created_at": 1471567800.0,
+    "id": "2017-04-01-0016",
+    "longitude": -97.25285547806973
+  },
+  "incidents": [
+    {
+      "category": "power_outage",
+      "detected_at": 1471567800.0,
+      "prediction": 1.0,
+      "coordinates": {
+        "lat": 30.151624570610586,
+        "long": -97.25285547806973
+      },
+      "source": {
+        "text": "Power Outage",
+        "created_at": 1471567800.0,
+        "provider": {
+          "url": "http://outage.bluebonnetelectric.coop:82/",
+          "api_route": "api/weboutageviewer/get_live_data",
+          "api_host": "outage.bluebonnetelectric.coop:82",
+          "id": "bb_power_outages",
+          "name": "Bluebonnet Electric Cooperative"
+        },
+        "type": "cad_api",
+        "geo": {
+          "type": "Point",
+          "coordinates": [
+            -97.25285547806973,
+            30.151624570610586
+          ]
+        },
+        "id": "2017-04-01-0016"
+      },
+      "incident": "Power Outage"
+    }
+  ],
+  "raw_incident": "{'OutageLocation':{'X':-97.252855478069733,'Y':30.151624570610586},'OutagePolygon':[],'OutageRecID':'2017-04-01-0016','OutageName':'2017-04-01-0016','OutageStartTime':'2016-08-18T20:50:00-04:00','OutageEndTime':null,'CustomersRestored':0,'CustomersOutNow':133,'Verified':false,'CrewDispatched':true,'CustomerResponsible':null,'EstimatedTime':null,'TroubledElement':null,'Substation':null,'Feeder':null,'OutagedPhase':null,'Actions':null,'Status':null,'Dispatcher':null,'ClosingDispatcher':null,'CustomersOutInitially':null,'CustomersServed':null,'SuspectedCause':null,'VerifiedCause':null,'Notes':null,'CrewResponsible':null,'MapLocation':null,'PriorityCustomers':null,'District':null,'UplineElement':null,'CostEstimate':null,'OutageStatus':null,'CustomersAffected':null}"
+}

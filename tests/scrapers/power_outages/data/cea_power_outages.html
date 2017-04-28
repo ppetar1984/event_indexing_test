@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://www.chugachelectric.com/outage/outage_map.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr"><!--
+Display outage map.
+Model Mobile after: http://www.outagemap-xcelenergy.com/outagemap/#
+Slide source: http://codepen.io/jasonhowmans/pen/dykhL
+14-Sep-2012, S Finneran (CEA).
+16-Sep-2012, S Finneran. Add auto refresh of outage calls.
+21-Sep-2012, S Finneran. Add mobile support.
+11-May-2015, S Finneran. Adjust InfoWindow text for multi-line.
+21-May-2015, S Finneran. Rewrite for CGI OMS system and data.
+08-Jul-2015, S Finneran. Cleanup.
+26-Jan-2016, S Finneran. Adjust icon URLs to: maps.google.com .
+03-Oct-2016, S Finneran. Enable touch and mouse events, for Chrome on touch + trackpad|mouse devices.
+--><head id="Head1"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">.gm-style .gm-style-mtc label,.gm-style .gm-style-mtc div{font-weight:400}</style><link type="text/css" rel="stylesheet" href="./Power Outage Map _ Chugach Electric Association, Inc._files/css"><style type="text/css">.gm-style .gm-style-cc span,.gm-style .gm-style-cc a,.gm-style .gm-style-mtc div{font-size:10px}</style><style type="text/css">@media print {  .gm-style .gmnoprint, .gmnoprint {    display:none  }}@media screen {  .gm-style .gmnoscreen, .gmnoscreen {    display:none  }}</style><style type="text/css">.gm-style-pbc{transition:opacity ease-in-out;background-color:rgba(0,0,0,0.45);text-align:center}.gm-style-pbt{font-size:22px;color:white;font-family:Roboto,Arial,sans-serif;position:relative;margin:0;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}</style><style type="text/css">.gm-style { font: 400 11px Roboto, Arial, sans-serif;text-decoration: none; }.gm-style img { max-width: none; }</style>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no"> 
+  
+  <meta content="Power Outage Map" about="/power-outage-map" property="dc:title">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> 
+  <meta http-equiv="Pragma" content="no-cache"> 
+  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <title>Power Outage Map | Chugach Electric Association, Inc.</title>
+  <link rel="stylesheet" href="./Power Outage Map _ Chugach Electric Association, Inc._files/jquery.mobile.min.css">
+  <style type="text/css">
+    html, body { width: 100%; height: 100%; margin: 0; padding: 0 }
+    .head { background-color: lightgray; font-size: 120%; font-weight: bold; }
+    .col1-bold > tbody > tr > td:first-child { font-weight: bold; }
+    td { padding: 0 5px; }
+    .vertical-text {
+      -moz-transform: rotate(270deg) translateX(-36px);
+      -moz-transform-origin: left top 0;
+      -webkit-transform: rotate(270deg) translateX(-36px);
+      -webkit-transform-origin: left top 0;
+      transform: rotate(270deg) translateX(-36px);
+      transform-origin: left top 0;
+    }
+    #summary-title { margin: 0; }
+    #legend, #summary, #grids { font-size: .85em; }
+    .header {font-weight: bold;}
+    #title { font-size: 1.5em; font-weight: bold; background-color: rgba(255, 255, 255, 0.6); padding: 5px; }
+    #site-link { padding: 2px 0 4px; font-size: .85em; }
+    #legend-div { padding: 5px; background-color: rgba(255, 255, 255, 0.6); pointer-events:none; font-size: 125%; }
+    #legend-div h4 { margin: 5px; }
+    #grids td:nth-child(n+2) { text-align: right; }
+    #grids tr:last-child { font-weight: bold; }
+    #last-updated { font-size: .6em; }
+    #slide-panel { padding: 2px; }
+    #logo { padding: 5px; cursor: pointer; }
+
+    /* Slider. */
+    #slide-panel { position: fixed; top: 0; bottom: 0; display: block;
+      float: left; width: 100%; height: 100%; }
+    div#content { position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; overflow: scroll;
+      -moz-transition: all 300ms; -webkit-transition: all 300ms; transition: all 300ms; }
+    #slide-trigger { padding: 5px; font-size: 12pt; font-weight: bold; background: Thistle;
+      cursor: pointer; border-radius: 0 0 8px 8px; border: 1px black solid; }
+  </style>
+  <script src="./Power Outage Map _ Chugach Electric Association, Inc._files/js"></script>
+  <script src="./Power Outage Map _ Chugach Electric Association, Inc._files/jquery.min.js"></script>
+  <script src="./Power Outage Map _ Chugach Electric Association, Inc._files/infobox.js"></script>
+  <script src="./Power Outage Map _ Chugach Electric Association, Inc._files/mustache.min.js"></script>
+  <script src="./Power Outage Map _ Chugach Electric Association, Inc._files/pointer_events_polyfill.js"></script>
+  <script type="text/javascript">
+    var sliderWidth = 250;
+    var incidentsUrl = /(www|dweb2?)\.chugachelectric\.com/i.test(location.hostname) ? "Incidents.js" : "Incidents.ashx";
+    var incidentsIntervalSecs = 60;  // 1 minute.
+    var gridsUrl = /(www|dweb2?)\.chugachelectric\.com/i.test(location.hostname) ? "Grids.js" : "Grids.ashx";
+    var gridsIntervalSecs = 60;  // 1 minute.
+    var map;
+    var labels = [];
+    var markers = [];
+
+    // Define layer prototype.
+    function layer(type, visible, minZoom, style) {
+      this.type = type;  // /(label|polygon)/
+      this.visible = visible;
+      this.minZoom = minZoom;
+      this.style = style;
+      this.features = [];
+      this.map = null;
+      this.setMap = function(map) {
+        this.map = map;
+      }
+      this.setVisible = function(visible) {
+        this.visible = visible;
+        this.changed();
+      };
+      // Display based on both visible property and current map zoom.
+      this.changed = function() {
+        for(var j = 0; j < this.features.length; j ++) {
+          var fea = this.features[j];
+          var vis = this.visible && (this.map.getZoom() >= this.minZoom);
+          if (this.type == "label") {
+            if (vis)
+              fea.show();
+            else
+              fea.hide();
+          }
+          else {
+            fea.setVisible(vis);
+          }
+        };
+      };
+    }
+
+    // Setup overlay layers.
+    var layers = {
+      "mlp": new layer("polygon", true, 0, {
+        fillColor: "#FF9900",
+        fillOpacity: 0.25,
+        strokeColor: "#FF9900",
+        strokeOpacity: 0.80,
+      }),
+      "mlp_labels": new layer("label", true, 10, {
+        boxStyle: {
+          border: "none",
+          textAlign: "center",
+          fontSize: "8pt",
+          width: "50px",
+          fontWeight: "bold",
+        },
+        pixelOffset: new google.maps.Size(-25, 0),
+      }),
+      "sect": new layer("polygon", true, 0, {
+        fillColor: "#FF00FF",
+        fillOpacity: 0.10,
+        strokeColor: "#FF00FF",
+        strokeOpacity: 0.80,
+        strokeWeight: 0.5,
+      }),
+      "sect_labels": new layer("label", true, 10, {
+        boxStyle: {
+          border: "none",
+          textAlign: "center",
+          fontSize: "8pt",
+          width: "50px",
+          fontWeight: "bold",
+        },
+        pixelOffset: new google.maps.Size(-25, 0),
+      }),
+    };
+    var mapLeft = sliderWidth;  // Start with slider open.
+
+    var icons = {
+      500: { label: "over 500", url: "http://maps.google.com/mapfiles/ms/micons/red-dot.png"},
+      100: { label: "101-500", url: "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"},
+       50: { label: "51-100", url: "http://maps.google.com/mapfiles/ms/micons/green-dot.png"},
+       10: { label: "11-50", url: "http://maps.google.com/mapfiles/ms/micons/ltblue-dot.png"},
+        0: { label: "10 or less", url: "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"},
+//       500: { label: "100-500", url: "http://maps.google.com/mapfiles/ms/micons/orange-dot.png"},
+//        0: "http://maps.google.com/mapfiles/ms/micons/purple-dot.png",
+//        0: "http://maps.google.com/mapfiles/ms/micons/pink-dot.png",
+    };
+
+    // Service point centroid.
+    var centerLongitude = -149.834191764587;
+    var centerLatitude = 61.1509474865253;
+
+    // Disable Mustache escaping.
+    Mustache.escape = function(x) {return x;};
+
+    $(document).ready(function() {
+      // Enable touch and mouse events, for Chrome on touch + trackpad|mouse devices.
+      navigator = navigator || {};
+      navigator.msMaxTouchPoints = navigator.msMaxTouchPoints || 2;
+      navigator.msPointerEnabled = true;
+
+      PointerEventsPolyfill.initialize({selector: "#legend-div"});
+      var latlng = new google.maps.LatLng(centerLatitude, centerLongitude);
+      var myOptions = {
+        zoom: 10
+        , center: latlng
+        , mapTypeId: google.maps.MapTypeId.ROADMAP
+        , maxZoom: 13
+        , streetViewControl: false
+      };
+      
+      // Add map decoration.
+      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+      var title = document.getElementById('title');
+      map.controls[google.maps.ControlPosition.TOP_CENTER].push(title);
+      var legend = document.getElementById('legend-div');
+      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+      var trigger = document.getElementById('slide-trigger');
+      map.controls[google.maps.ControlPosition.LEFT_CENTER].push(trigger);
+      var mapUpdated = document.getElementById('map-updated');
+      map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(mapUpdated);
+      var logo = document.getElementById('logo');
+      logo.index = 0; // used for ordering
+      map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(logo);
+     
+      // Add layers to map.
+      $.each(layers, function(key, layer) {
+        layer.setMap(map);
+      });
+
+      // Kludge to remove vestigial scrollbars.
+      $("#content").css("overflow", "hidden");
+
+      // Auto resize to window.
+      $(window).resize(function () {
+        $("#map_canvas").height($(window).height());
+        $("#content").css("left", mapLeft + "px");
+        var mapwidth = $(window).width() - mapLeft;
+        $("#content").width(mapwidth);
+        setTimeout(function() {
+          google.maps.event.trigger(map, 'resize');
+          map.setZoom( map.getZoom() );
+        });
+      });
+
+      // Turn MLP label off at lower zooms.
+      google.maps.event.addListener(map, 'zoom_changed', zoomChanged);
+
+      // Add outage call features to map.
+      setTimeout(addIncidents);
+      setInterval(addIncidents, incidentsIntervalSecs * 1000);
+
+      // Add grids table.
+      setTimeout(addGrids);
+      setInterval(addGrids, gridsIntervalSecs * 1000);
+
+      // Get MLP polygon.
+      $.getJSON("mlpServiceArea.js", function (data) {
+        data.features[0].attributes.MAPSHEETNAME = "ML &amp; P Service Area";
+        addPolygonsWithLabels(map, data, "MAPSHEETNAME", layers.mlp, layers.mlp_labels);
+        zoomChanged();
+      });
+
+      // Get Sectionalizing polygons.
+      $.getJSON("Sectionalizing.js", function (data) {
+        addPolygonsWithLabels(map, data, "SECTIONMAP", layers.sect, layers.sect_labels);
+        zoomChanged();
+      });
+    
+      $("#slide-panel").css("max-width", sliderWidth);
+      $(window).resize();
+
+      // Setup slide panel event.
+      $("#slide-trigger").on("click", toggleSlider);
+      
+      // Construct legend.
+      var legenddef = "<table>";
+      var keys = Object.keys(icons);
+      for (var j = 0; j < keys.length; j ++) {
+        legenddef += "<tr><td><img src='" + icons[keys[j]].url + "'></td><td>" +
+          escapeHTML(icons[keys[j]].label) + "</td></tr>";
+      }
+      legenddef += "</table>";
+      $("#legend").html(legenddef);
+    });
+
+    function escapeHTML (unsafe_str) {
+      return unsafe_str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/\'/g, '&#39;'); // '&apos;' is not valid HTML 4
+    }
+
+    function toggleSlider() {
+      mapLeft = mapLeft == 0 ? sliderWidth : 0;
+      $(window).resize();
+    }
+    
+    function zoomChanged() {
+      $.each(layers, function(key, layer) {
+        layer.changed();
+      });
+    }
+
+    // Markers and Infowindows.
+    var contentTpl =
+      "<table class='col1-bold'>" +
+      "<tr><td colspan='2' class='head'>Outage</td></tr>" +
+      "<tr><td>Customers Out:</td><td>{{CUSTOMERS_AFFECTED}}</td></tr>" +
+      "<tr><td>Start:</td><td>{{OUTAGE_START}}</td></tr>" +
+      "<tr><td>Est Restore:</td><td>{{EST_RESTORATION}}</td></tr>" +
+      "<tr><td>Status:</td><td>{{OUTAGE_STATUS}}</td></tr>" +
+      "</table>";
+    var labelTpl =
+      "Outage\n" +
+      "Customers Out: {{CUSTOMERS_AFFECTED}}\n" +
+      "Start: {{OUTAGE_START}}\n" +
+      "Est Restore: {{EST_RESTORATION}}\n" +
+      "Status: {{OUTAGE_STATUS}}"
+    var infowindow = new google.maps.InfoWindow();
+    // Return index for list value just less than val.
+    function comb(list, val) {
+      for(var j = 0; j < list.length; j ++) {
+        if (val < list[j])  return j - 1;
+      }
+      return list.length - 1;
+    }
+    function addIncidents() {
+        // Remove old markers.
+        for(var j = 0; j < markers.length; j++) {
+          markers[j].setMap(null);
+        }
+        // Get script with time pseudo-argument to avoid caching.
+        $.getJSON(incidentsUrl + "?t=" + (new Date()).getTime(), function (data) {
+            var iconKeys = Object.keys(icons);
+            $.each(data["Items"], function (i, item) {
+                var affected = parseInt(item.CUSTOMERS_AFFECTED);
+                var latLong = new google.maps.LatLng(item.LATITUDE, item.LONGITUDE);
+                var iconIndex = comb(iconKeys, affected);
+                var marker = new google.maps.Marker({
+                    position: latLong,
+                    map: map,
+                    title: Mustache.render(labelTpl, item),
+                    icon: icons[iconKeys[iconIndex]].url,
+                });
+                markers.push(marker);
+
+                google.maps.event.addListener(marker, "click", (function (marker, item) {
+                    return function () {
+                        infowindow.setContent(Mustache.render(contentTpl, item));
+                        infowindow.open(map, marker);
+                    };
+                })(marker, item));
+
+            });
+            $(window).resize();
+            $("#map-last-updated").text(data["Datetime"]);
+        })
+        .error(function (jqXHR) {
+          console.log("getJSON error, url=" + incidentsUrl + ":\n  " + JSON.stringify(jqXHR));
+        });
+    }
+
+    // Summary table.
+    var gridTableTpl =
+      "<table>\n" +
+      "<tr class='header'><td>Service</td><td colspan='2'>Customers</td></tr>\n" +
+      "<tr class='header'><td>Area</td><td>Out</td><td>Served</td></tr>\n{{.}}" +
+      "</table>";
+    var gridTpl = "<tr><td>{{SECTIONMAP}}</td><td>{{CUST_OUT}}</td><td>{{CUST_SERVED}}</td></tr>";
+    function addGrids() {
+        // Get script with time pseudo-argument to avoid caching.
+        var rows = [];
+        $.getJSON(gridsUrl + "?t=" + (new Date()).getTime(), function(data) {
+          var rows = $.map(data["Items"], function (item, i) {
+              return Mustache.render(gridTpl, item);
+          });
+          rows.sort(function(a, b){
+            var a2 = a.replace("-", "~");
+            var b2 = b.replace("-", "~");
+            return (a2 < b2) ? -1 : 1;
+          });
+          if (rows.length == 0)
+            rows = ["<tr><td colspan='2'>No known outages.</td></tr>"];
+          gridTable = Mustache.render(gridTableTpl, rows.join("\n"));
+          $("#grids-last-updated").text(data["Datetime"]);
+          $("#grids").html(gridTable);
+        })
+        .error(function (jqXHR) {
+          console.log("getJSON error, url=" + incidentsUrl + ":\n  " + JSON.stringify(jqXHR));
+        });
+    }
+
+    if (!google.maps.Polygon.prototype.getBounds) {
+      google.maps.Polygon.prototype.getBounds = function(latLng) {
+        var bounds = new google.maps.LatLngBounds();
+        var paths = this.getPaths();
+        var path;
+        for (var p = 0; p < paths.getLength(); p++) {
+          path = paths.getAt(p);
+          for (var i = 0; i < path.getLength(); i++) {
+            bounds.extend(path.getAt(i));
+          }
+        }
+        return bounds;
+      }
+    }
+
+    // Reference: http://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
+    function centroid(points) {
+      var n = points.length;
+      var area = 0, lng = 0, lat = 0;
+      var subarea;
+      for(var j = 0; j < n; j ++) {
+        subarea = points[j].lng() * points[(j + 1) % n].lat() - points[(j + 1) % n].lng() * points[j].lat();
+        area += subarea;
+        lng += (points[j].lng() + points[(j + 1) % n].lng()) * subarea;
+        lat += (points[j].lat() + points[(j + 1) % n].lat()) * subarea;
+      }
+      area *= 0.5;
+      lng *= 1 / (6 * area);
+      lat *= 1 / (6 * area);
+      return new google.maps.LatLng(lat, lng);
+    }
+
+    function addPolygonsWithLabels(map, data, labelAttr, featureLayer, labelLayer) {
+      $.each(data.features, function(j, feature) {
+        var ring = feature.geometry.rings[0];
+        var points = [];
+        $.each(ring, function (i, item) {
+          var latLong = new google.maps.LatLng(item[1], item[0]);
+          points.push(latLong);
+        });
+
+        var pointArray = new google.maps.MVCArray(points);
+        var polygon = new google.maps.Polygon(
+          $.extend({
+              map: map,
+              paths: pointArray,
+            },
+            featureLayer.style));
+        polygon.setMap(map);
+        featureLayer.features.push(polygon);
+      
+        // Add label.
+        var label = new InfoBox(
+          $.extend({
+              content: feature.attributes[labelAttr],
+              disableAutoPan: true,
+              position: centroid(polygon.getPath().getArray()),
+              closeBoxURL: "",
+              isHidden: true,
+              pane: "mapPane",
+              enableEventPropagation: true,
+            },
+            labelLayer.style));
+        label.open(map);
+        labelLayer.features.push(label);
+      });
+    }
+  </script> 
+
+<script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/common.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/map.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/util.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/geometry.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/poly.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/overlay.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/infowindow.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/onion.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/stats.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/controls.js"></script><script type="text/javascript" charset="UTF-8" src="./Power Outage Map _ Chugach Electric Association, Inc._files/marker.js"></script></head>
+<body>
+  <div id="slide-panel" data-role="content" style="max-width: 250px;">
+    <div id="site-link">
+      <a href="https://www.chugachelectric.com/">Chugach Home</a>
+    </div>
+    <h3 id="summary-title">Outage Summary</h3>
+    <div id="grids"><table>
+<tbody><tr class="header"><td>Service</td><td colspan="2">Customers</td></tr>
+<tr class="header"><td>Area</td><td>Out</td><td>Served</td></tr>
+<tr><td>Huffman</td><td>19</td><td>2238</td></tr>
+<tr><td>Jewel Lake</td><td>21</td><td>5800</td></tr>
+<tr><td>Sand Lake</td><td>1</td><td>9956</td></tr>
+<tr><td>Spenard</td><td>1</td><td>9988</td></tr>
+<tr><td>- Total Out -</td><td>42</td><td></td></tr></tbody></table></div>
+    <p id="last-updated">Updated: <span id="grids-last-updated">04/24/2017 13:20</span></p>
+  </div>
+  <div id="content" style="overflow: hidden; left: 250px; width: 1116px;">
+    <div id="map_canvas" style="height: 150px; position: relative; overflow: hidden;"><div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);"><div class="gm-style" style="position: absolute; left: 0px; top: 0px; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px; z-index: 0;"><div style="position: absolute; left: 0px; top: 0px; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px; z-index: 0; cursor: url(&quot;https://maps.gstatic.com/mapfiles/openhand_8_8.cur&quot;) 8 8, default;"><div style="position: absolute; left: 0px; top: 0px; z-index: 1; width: 100%; transform-origin: 0px 0px 0px; transform: matrix(1, 0, 0, 1, 0, 0);"><div style="position: absolute; left: 0px; top: 0px; z-index: 100; width: 100%;"><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 525.863px; top: 11.9201px;">ML &amp; P Service Area</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 425.572px; top: 96.8466px;">Jewel Lake</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 641.239px; top: 140.495px;">Prospect</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 770.547px; top: 520.067px;">Hope</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 374.662px; top: 57.4488px;">Airport West</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 421.26px; top: 53.2139px;">Airport</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 551.921px; top: 53.2227px;">Dowling</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 567.001px; top: 226.755px;">Goldenview</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 619.44px; top: 96.8416px;">Stuckagain</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 630.439px; top: 227.547px;">Hillside</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 404.864px; top: 20.4632px;">Airport North</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 515.372px; top: 182.208px;">Oceanview</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 576.67px; top: 183.961px;">Huffman</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 641.276px; top: 184.04px;">Glenn Alps</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 459.474px; top: 13.1904px;">Northern Lights</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 451.21px; top: 137.735px;">Campbell Lake</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 374.508px; top: 92.3202px;">Jewel Lake West</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 586.256px; top: 261.324px;">Potter Heights</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 791.996px; top: 1060.34px;">Moose Pass - Daves Creek</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 920.82px; top: 419.868px;">Indian - Bird Point</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 685.797px; top: 323.052px;">Potter Heights - Indian</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: -467.501px; top: 195.669px;">Tyonek</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 1235.74px; top: 627.259px;">Portage - Whittier</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 437.607px; top: 64.1325px;">Airport Center</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 552.294px; top: 1087.59px;">Cooper Landing - Daves Creek</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 576.617px; top: 140.411px;">OMalley</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 600.952px; top: 53.2066px;">Boniface</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 486.596px; top: 53.2319px;">Spenard</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 512.356px; top: 140.735px;">Klatt</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 1051.02px; top: 390.375px;">Girdwood</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 594.215px; top: 8.8569px;">DeBarr</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 490.432px; top: 97.2883px;">Sand Lake</div><div class="infoBox" style="border: none; text-align: center; font-size: 8pt; width: 50px; font-weight: bold; transform: translateZ(0px); position: absolute; visibility: visible; left: 554.831px; top: 96.6212px;">Campbell Airstrip</div><div style="position: absolute; left: 0px; top: 0px; z-index: 0;"><div aria-hidden="true" style="position: absolute; left: 0px; top: 0px; z-index: 1; visibility: inherit;"><div style="width: 256px; height: 256px; position: absolute; left: 352px; top: -82px;"></div><div style="width: 256px; height: 256px; position: absolute; left: 96px; top: -82px;"></div><div style="width: 256px; height: 256px; position: absolute; left: 608px; top: -82px;"></div><div style="width: 256px; height: 256px; position: absolute; left: -160px; top: -82px;"></div><div style="width: 256px; height: 256px; position: absolute; left: 864px; top: -82px;"></div></div></div></div><div style="position: absolute; left: 0px; top: 0px; z-index: 101; width: 100%;"><div style="position: absolute; left: 0px; top: 0px; z-index: 30;"><div aria-hidden="true" style="position: absolute; left: 0px; top: 0px; z-index: 1; visibility: inherit;"><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 352px; top: -82px;"><canvas width="256" height="256" draggable="false" style="width: 256px; height: 256px; user-select: none; position: absolute; left: 0px; top: 0px;"></canvas></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 96px; top: -82px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 608px; top: -82px;"><canvas width="256" height="256" draggable="false" style="width: 256px; height: 256px; user-select: none; position: absolute; left: 0px; top: 0px;"></canvas></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: -160px; top: -82px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 864px; top: -82px;"></div></div></div></div><div style="position: absolute; left: 0px; top: 0px; z-index: 102; width: 100%;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 103; width: 100%;"><div style="position: absolute; left: 0px; top: 0px; z-index: -1;"><div aria-hidden="true" style="position: absolute; left: 0px; top: 0px; z-index: 1; visibility: inherit;"><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 352px; top: -82px;"><canvas draggable="false" height="256" width="256" style="user-select: none; position: absolute; left: 0px; top: 0px; height: 256px; width: 256px;"></canvas></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 96px; top: -82px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 608px; top: -82px;"><canvas draggable="false" height="256" width="256" style="user-select: none; position: absolute; left: 0px; top: 0px; height: 256px; width: 256px;"></canvas></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: -160px; top: -82px;"></div><div style="width: 256px; height: 256px; overflow: hidden; position: absolute; left: 864px; top: -82px;"></div></div></div></div><div style="position: absolute; left: 0px; top: 0px; z-index: 0;"><div aria-hidden="true" style="position: absolute; left: 0px; top: 0px; z-index: 1; visibility: inherit;"><div style="position: absolute; left: 352px; top: -82px; transition: opacity 200ms ease-out;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/vt" draggable="false" alt="" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 96px; top: -82px; transition: opacity 200ms ease-out;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/vt(2)" draggable="false" alt="" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 608px; top: -82px; transition: opacity 200ms ease-out;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/vt(4)" draggable="false" alt="" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: -160px; top: -82px; transition: opacity 200ms ease-out;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/vt(6)" draggable="false" alt="" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div style="position: absolute; left: 864px; top: -82px; transition: opacity 200ms ease-out;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/vt(8)" draggable="false" alt="" style="width: 256px; height: 256px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div></div></div></div><div style="position: absolute; left: 0px; top: 0px; z-index: 2; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px; opacity: 0;" class="gm-style-pbc"><p class="gm-style-pbt">Use two fingers to move the map</p></div><div style="position: absolute; left: 0px; top: 0px; z-index: 3; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 4; width: 100%; transform-origin: 0px 0px 0px; transform: matrix(1, 0, 0, 1, 0, 0);"><div style="position: absolute; left: 0px; top: 0px; z-index: 104; width: 100%;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 105; width: 100%;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 106; width: 100%;"></div><div style="position: absolute; left: 0px; top: 0px; z-index: 107; width: 100%;"><div style="z-index: -202; cursor: pointer; display: none;"><div style="width: 30px; height: 27px; overflow: hidden; position: absolute;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/undo_poly.png" draggable="false" style="position: absolute; left: 0px; top: 0px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none; width: 90px; height: 27px;"></div></div></div></div><iframe style="visibility: hidden; z-index: 0; position: absolute; height: 100%; width: 100%; padding: 0px; border-width: 0px; margin: 0px; left: 0px; top: 0px;" src="./Power Outage Map _ Chugach Electric Association, Inc._files/saved_resource.html"></iframe></div><div style="margin-left: 5px; margin-right: 5px; z-index: 1000000; position: absolute; left: 0px; bottom: 0px;"><a target="_blank" href="https://maps.google.com/maps?ll=61.166515,-149.834192&amp;z=10&amp;t=m&amp;hl=en-US&amp;gl=US&amp;mapclient=apiv3" title="Click to see this area on Google Maps" style="position: static; overflow: visible; float: none; display: inline;"><div style="width: 66px; height: 26px; cursor: pointer;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/google4.png" draggable="false" style="position: absolute; left: 0px; top: 0px; width: 66px; height: 26px; user-select: none; border: 0px; padding: 0px; margin: 0px;"></div></a></div><div style="background-color: white; padding: 15px 21px; border: 1px solid rgb(171, 171, 171); font-family: Roboto, Arial, sans-serif; color: rgb(34, 34, 34); box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px; z-index: 10000002; display: none; width: 256px; height: 108px; position: absolute; left: 408px; top: 5px;"><div style="padding: 0px 0px 10px; font-size: 16px;">Map Data</div><div style="font-size: 13px;">Map data ©2017 Google</div><div style="width: 13px; height: 13px; overflow: hidden; position: absolute; opacity: 0.7; right: 12px; top: 12px; z-index: 10000;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/mapcnt6.png" draggable="false" style="position: absolute; left: -2px; top: -336px; width: 59px; height: 492px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/transparent.png" draggable="false" style="width: 37px; height: 37px; user-select: none; border: 0px; padding: 0px; margin: 0px; position: absolute; right: 0px; top: 0px; z-index: 10001; cursor: pointer;"></div><div class="gmnoprint" style="z-index: 1000001; position: absolute; right: 71px; bottom: 0px; width: 121px;"><div draggable="false" class="gm-style-cc" style="user-select: none; height: 14px; line-height: 14px;"><div style="opacity: 0.7; width: 100%; height: 100%; position: absolute;"><div style="width: 1px;"></div><div style="background-color: rgb(245, 245, 245); width: auto; height: 100%; margin-left: 1px;"></div></div><div style="position: relative; padding-right: 6px; padding-left: 6px; font-family: Roboto, Arial, sans-serif; font-size: 10px; color: rgb(68, 68, 68); white-space: nowrap; direction: ltr; text-align: right; vertical-align: middle; display: inline-block;"><a style="color: rgb(68, 68, 68); text-decoration: none; cursor: pointer; display: none;">Map Data</a><span>Map data ©2017 Google</span></div></div></div><div class="gmnoscreen" style="position: absolute; right: 0px; bottom: 0px;"><div style="font-family: Roboto, Arial, sans-serif; font-size: 11px; color: rgb(68, 68, 68); direction: ltr; text-align: right; background-color: rgb(245, 245, 245);">Map data ©2017 Google</div></div><div class="gmnoprint gm-style-cc" draggable="false" style="z-index: 1000001; user-select: none; height: 14px; line-height: 14px; position: absolute; right: 0px; bottom: 0px;"><div style="opacity: 0.7; width: 100%; height: 100%; position: absolute;"><div style="width: 1px;"></div><div style="background-color: rgb(245, 245, 245); width: auto; height: 100%; margin-left: 1px;"></div></div><div style="position: relative; padding-right: 6px; padding-left: 6px; font-family: Roboto, Arial, sans-serif; font-size: 10px; color: rgb(68, 68, 68); white-space: nowrap; direction: ltr; text-align: right; vertical-align: middle; display: inline-block;"><a href="https://www.google.com/intl/en-US_US/help/terms_maps.html" target="_blank" style="text-decoration: none; cursor: pointer; color: rgb(68, 68, 68);">Terms of Use</a></div></div><div style="cursor: pointer; width: 25px; height: 25px; overflow: hidden; display: none; margin: 10px 14px; position: absolute; top: 0px; right: 0px;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/sv9.png" draggable="false" class="gm-fullscreen-control" style="position: absolute; left: -52px; top: -86px; width: 164px; height: 175px; user-select: none; border: 0px; padding: 0px; margin: 0px;"></div><div id="title" style="z-index: 0; position: absolute; top: 0px; left: 508px;">Outage Map</div><div id="slide-trigger" class="vertical-text" style="z-index: 0; position: absolute; left: 0px; top: 60px;">Summary</div><div id="legend-div" title="Legend" style="z-index: 0; position: absolute; bottom: 14px; right: 0px;">
+      <h4>Customers Affected</h4>
+      <div id="legend"><table><tbody><tr><td><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/blue-dot.png"></td><td>10 or less</td></tr><tr><td><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/ltblue-dot.png"></td><td>11-50</td></tr><tr><td><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/green-dot.png"></td><td>51-100</td></tr><tr><td><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/yellow-dot.png"></td><td>101-500</td></tr><tr><td><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/red-dot.png"></td><td>over 500</td></tr></tbody></table></div>
+    </div><div id="logo" style="z-index: 0; position: absolute; left: 76px; bottom: 0px;">
+      <img src="./Power Outage Map _ Chugach Electric Association, Inc._files/CeaLogo.png">
+    </div><div id="map-updated" style="z-index: 0; position: absolute; bottom: 0px; left: 491px;">Updated: <span id="map-last-updated">04/24/2017 13:20</span></div><div class="gmnoprint gm-bundled-control gm-bundled-control-on-bottom" draggable="false" controlwidth="0" controlheight="0" style="margin: 10px; user-select: none; position: absolute; display: none; bottom: 14px; right: 0px;"><div class="gmnoprint" controlwidth="28" controlheight="55" style="display: none; position: absolute;"><div draggable="false" style="user-select: none; box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px; border-radius: 2px; cursor: pointer; width: 28px; height: 55px; background-color: rgb(255, 255, 255);"><div title="Zoom in" style="position: relative; width: 28px; height: 27px; left: 0px; top: 0px;"><div style="overflow: hidden; position: absolute; width: 15px; height: 15px; left: 7px; top: 6px;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/tmapctrl.png" draggable="false" style="position: absolute; left: 0px; top: 0px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none; width: 120px; height: 54px;"></div></div><div style="position: relative; overflow: hidden; width: 67%; height: 1px; left: 16%; top: 0px; background-color: rgb(230, 230, 230);"></div><div title="Zoom out" style="position: relative; width: 28px; height: 27px; left: 0px; top: 0px;"><div style="overflow: hidden; position: absolute; width: 15px; height: 15px; left: 7px; top: 6px;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/tmapctrl.png" draggable="false" style="position: absolute; left: 0px; top: 0px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none; width: 120px; height: 54px;"></div></div></div></div></div><div class="gmnoprint gm-bundled-control gm-bundled-control-on-bottom" draggable="false" controlwidth="0" controlheight="0" style="margin: 10px; user-select: none; position: absolute; display: none; bottom: 26px; left: 0px;"><div class="gmnoprint" controlwidth="28" controlheight="0" style="display: none; position: absolute;"><div title="Rotate map 90 degrees" style="width: 28px; height: 28px; overflow: hidden; position: absolute; border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px; cursor: pointer; background-color: rgb(255, 255, 255); display: none;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/tmapctrl4.png" draggable="false" style="position: absolute; left: -141px; top: 6px; width: 170px; height: 54px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div><div class="gm-tilt" style="width: 0px; height: 0px; overflow: hidden; position: absolute; border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px; top: 0px; cursor: pointer; background-color: rgb(255, 255, 255);"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/tmapctrl4.png" draggable="false" style="position: absolute; left: 0px; top: 0px; width: 170px; height: 54px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;"></div></div></div><div class="gmnoprint" style="margin: 10px; z-index: 0; position: absolute; cursor: pointer; display: none; left: 0px; top: 0px;"><div class="gm-style-mtc" style="float: left;"><div draggable="false" title="Show street map" style="direction: ltr; overflow: hidden; text-align: center; position: relative; color: rgb(0, 0, 0); font-family: Roboto, Arial, sans-serif; user-select: none; font-size: 11px; background-color: rgb(255, 255, 255); padding: 11px; border-bottom-left-radius: 2px; border-top-left-radius: 2px; -webkit-background-clip: padding-box; background-clip: padding-box; box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px; min-width: 22px; font-weight: 500;">Map</div><div style="background-color: white; z-index: -1; padding: 2px; border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px; position: absolute; left: 0px; top: 35px; text-align: left; display: none;"><div draggable="false" title="Show street map with terrain" style="color: rgb(0, 0, 0); font-family: Roboto, Arial, sans-serif; user-select: none; font-size: 11px; background-color: rgb(255, 255, 255); padding: 8px; direction: ltr; text-align: left; white-space: nowrap;"><span role="checkbox" style="box-sizing: border-box; position: relative; line-height: 0; font-size: 0px; margin: 0px 5px 0px 0px; display: inline-block; background-color: rgb(255, 255, 255); border: 1px solid rgb(198, 198, 198); border-radius: 1px; width: 13px; height: 13px; vertical-align: middle;"><div style="position: absolute; left: 1px; top: -2px; width: 13px; height: 11px; overflow: hidden; display: none;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/imgs8.png" draggable="false" style="position: absolute; left: -52px; top: -44px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none; width: 68px; height: 67px;"></div></span><label style="vertical-align: middle; cursor: pointer;">Terrain</label></div></div></div><div class="gm-style-mtc" style="float: left;"><div draggable="false" title="Show satellite imagery" style="direction: ltr; overflow: hidden; text-align: center; position: relative; color: rgb(86, 86, 86); font-family: Roboto, Arial, sans-serif; user-select: none; font-size: 11px; background-color: rgb(255, 255, 255); padding: 11px; border-bottom-right-radius: 2px; border-top-right-radius: 2px; -webkit-background-clip: padding-box; background-clip: padding-box; box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px; border-left: 0px; min-width: 40px;">Satellite</div><div style="background-color: white; z-index: -1; padding: 2px; border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px; position: absolute; right: 0px; top: 35px; text-align: left; display: none;"><div draggable="false" title="Show imagery with street names" style="color: rgb(0, 0, 0); font-family: Roboto, Arial, sans-serif; user-select: none; font-size: 11px; background-color: rgb(255, 255, 255); padding: 8px; direction: ltr; text-align: left; white-space: nowrap;"><span role="checkbox" style="box-sizing: border-box; position: relative; line-height: 0; font-size: 0px; margin: 0px 5px 0px 0px; display: inline-block; background-color: rgb(255, 255, 255); border: 1px solid rgb(198, 198, 198); border-radius: 1px; width: 13px; height: 13px; vertical-align: middle;"><div style="position: absolute; left: 1px; top: -2px; width: 13px; height: 11px; overflow: hidden;"><img src="./Power Outage Map _ Chugach Electric Association, Inc._files/imgs8.png" draggable="false" style="position: absolute; left: -52px; top: -44px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none; width: 68px; height: 67px;"></div></span><label style="vertical-align: middle; cursor: pointer;">Labels</label></div></div></div></div></div></div></div>
+    
+    
+    
+    
+    
+  </div>
+
+
+</body></html>

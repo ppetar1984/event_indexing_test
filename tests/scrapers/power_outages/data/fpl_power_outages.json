@@ -1,0 +1,75 @@
+{
+  "response": {
+    "outages": [
+      {
+        "Cause": "Stormy weather conditions",
+        "customersAffected": 11,
+        "dateReported": "08/18/16 08:50 PM",
+        "etr": "03/30/17 08:30 PM",
+        "lastUpdated": "03/30/2017 06:22 PM",
+        "lat": 29.332,
+        "lng": -81.061,
+        "status": "We will be dispatching a power restoration team to the area as soon as possible."
+      },
+      {
+        "Cause": "Under investigation",
+        "customersAffected": 4,
+        "dateReported": "08/16/16 00:50 AM",
+        "etr": "03/30/17 08:15 PM",
+        "lastUpdated": "03/30/2017 06:22 PM",
+        "lat": 25.493,
+        "lng": -80.437,
+        "status": "We will be dispatching a power restoration specialist to the area as soon as possible."
+      }
+    ]
+  },
+  "incident": {
+    "latitude": 29.332,
+    "created_at": 1471567800.0,
+    "incident": "Power Outage",
+    "id": "8549cf681a9ec8c2c73df8112ab848ac",
+    "longitude": -81.061
+  },
+  "incidents": [
+    {
+      "category": "power_outage",
+      "detected_at": 1471567800.0,
+      "prediction": 1.0,
+      "coordinates": {
+        "lat": 29.332,
+        "long": -81.061
+      },
+      "source": {
+        "text": "Power Outage",
+        "created_at": 1471567800.0,
+        "provider": {
+          "url": "http://www.fplmaps.com/",
+          "api_route": "/customer/outage/StormFeedRestoration.json",
+          "api_host": "www.fplmaps.com",
+          "id": "fpl_power_outages",
+          "name": "Florida Power and Light"
+        },
+        "type": "cad_api",
+        "geo": {
+          "type": "Point",
+          "coordinates": [
+            -81.061,
+            29.332
+          ]
+        },
+        "id": "8549cf681a9ec8c2c73df8112ab848ac"
+      },
+      "incident": "Power Outage"
+    }
+  ],
+  "raw_incident": {
+    "Cause": "Stormy weather conditions",
+    "customersAffected": 11,
+    "dateReported": "08/18/16 08:50 PM",
+    "etr": "03/30/17 08:30 PM",
+    "lastUpdated": "03/30/2017 07:27 PM",
+    "lat": 29.332,
+    "lng": -81.061,
+    "status": "A power restoration team is currently in the area and is working to restore your power."
+  }
+}

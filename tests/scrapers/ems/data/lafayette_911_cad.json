@@ -1,0 +1,35 @@
+{
+  "response": {
+    "d": " <center><a href=\"#KEY\">KEY<\/a><table border=0 bgcolor=\"white\"><tr bgcolor=\"blue\"><td><font color=\"white\"><b>Located At<\/font><\/b><\/td><td><font color=\"white\"><b>Due To<\/font><\/b><\/td><td><b><font color=\"white\">Reported At<\/font><\/b><\/td><td><font color=\"white\"><b>Assisting<\/b><\/font><\/td><\/tr><tr bgcolor=\"#FFFF99\"><td><b>&nbsp;<a href='http:\/\/maps.google.com\/maps?q=+PATRICIA+ST+%26++ARNOULD+BL+,LAFAYETTE+LA' target='_new'>PATRICIA ST &  ARNOULD BL<\/a>&nbsp;<BR>&nbsp;LAFAYETTE,LA&nbsp;<\/b><\/td><td><b>Incoming Call<\/b><\/td><td><b>08\/18\/2016 - 07:50 PM<\/b><\/td><td><b>F <\/b><\/td><\/tr><\/table><small>Data Updated at 04\/11\/2017 - 12:17:19 AM <\/small><\/center><script>$('dateline').innerHTML = '04\/11\/2017 - 12:17:19 AM'; <\/script>"
+  },
+  "incident": {
+    "created_at": 1471567800,
+    "incident": "Incoming Call",
+    "address": "PATRICIA ST & ARNOULD BL LAFAYETTE,LA",
+    "id": "7f16a7e049b034dfb4ac6b996e706a20"
+  },
+  "incidents": [
+    {
+      "category": "crime",
+      "detected_at": 1471567800,
+      "prediction": 1.0,
+      "address": "PATRICIA ST & ARNOULD BL LAFAYETTE,LA",
+      "source": {
+        "text": "Incoming Call",
+        "created_at": 1471567800,
+        "provider": {
+          "url": "http://apps.lafayettela.gov/L911/Service2.svc/getTrafficIncidents",
+          "api_route": "/default.aspx",
+          "api_host": "www.lafayette911.org",
+          "id": "lafayette_911_cad",
+          "name": "Lafayette 911"
+        },
+        "type": "cad_api",
+        "id": "d542355646cfea03a333610bf98a4668"
+      },
+      "incident": "Incoming Call"
+    }
+  ],
+  "raw_incident": "<center><a href=\"#KEY\">KEY<\/a><table border=0 bgcolor=\"white\"><tr bgcolor=\"#FFFF99\"><td><b>&nbsp;<a href='http:\/\/maps.google.com\/maps?q=+JOHNSTON+ST+%26++WOODVALE+AVE+,LAFAYETTE+LA' target='_new'>JOHNSTON ST &  WOODVALE AV<\/a>&nbsp;<BR>&nbsp;LAFAYETTE,LA&nbsp;<\/b><\/td><td><b>Vehicle Accident<\/b><\/td><td><b>08\/18\/2016 - 7:50 PM<\/b><\/td><td><b>P <\/b><\/td><\/tr><\/table><small>Data Updated at 04\/10\/2017 - 2:03:25 PM <\/small><\/center><script>$('dateline').innerHTML = '04\/10\/2017 - 2:03:25 PM'; <\/script>",
+  "value": "<td><b>         08\/18\/2016 - 7:50 PM<\/b><\/td>"
+}
